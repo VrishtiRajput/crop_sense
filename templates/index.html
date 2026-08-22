@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CropSense — AI Crop Disease Detector</title>
+
+  <!-- ✅ FIXED: Flask static path -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
+
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,600;1,300&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+  <!-- ── HEADER ── -->
+  <header>
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-leaf">🌿</span>
+        <span class="logo-text">CropSense</span>
+      </div>
+      <p class="tagline">AI-Powered Crop Disease Detection for Farmers</p>
+    </div>
+    <div class="header-bg-circles">
+      <div class="circle c1"></div>
+      <div class="circle c2"></div>
+      <div class="circle c3"></div>
+    </div>
+  </header>
+
+  <!-- ── MAIN ── -->
+  <main>
+
+    <!-- STEP 1: Upload -->
+    <section class="card upload-card" id="uploadSection">
+      <h2 class="card-title">📸 Upload a Crop Image</h2>
+      <p class="card-sub">Take a clear photo of the leaves, stem, or fruit of your crop</p>
+
+      <div class="dropzone" id="dropzone"
+           onclick="document.getElementById('fileInput').click()"
+           ondragover="handleDragOver(event)"
+           ondrop="handleDrop(event)">
+        <div class="dz-icon">🌾</div>
+        <p class="dz-text">Click to browse or drag & drop image here</p>
+        <p class="dz-sub">JPG · PNG · WEBP supported</p>
+        <input type="file" id="fileInput" accept="image/*" hidden onchange="handleFile(event)"/>
+      </div>
+
+      <div class="preview-area" id="previewArea" style="display:none">
+        <div class="preview-img-wrap">
+          <img id="previewImg" src="" alt="Crop preview"/>
+          <button class="change-btn" onclick="document.getElementById('fileInput').click()">Change Image</button>
+        </div>
+        <button class="analyze-btn" id="analyzeBtn" onclick="analyzeCrop()">
+          <span>🔬 Analyze Crop Health</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- STEP 2: Loading -->
+    <section class="card loading-card" id="loadingSection" style="display:none">
+      <div class="loader-wrap">
+        <div class="leaf-spinner">🌱</div>
+        <h3>Analyzing your crop...</h3>
+        <p>Our AI agronomist is examining the image</p>
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      </div>
+    </section>
+
+    <!-- STEP 3: Results -->
+    <section class="card results-card" id="resultsSection" style="display:none">
+
+      <div class="status-banner" id="statusBanner">
+        <span class="status-emoji" id="statusEmoji"></span>
+        <div>
+          <p class="status-label" id="statusLabel"></p>
+          <h2 class="status-title" id="statusTitle"></h2>
+        </div>
+      </div>
+
+      <div class="result-top">
+        <img id="resultImg" src="" alt="Analyzed crop" class="result-thumb"/>
+        <div class="quick-info">
+          <div class="info-chip">
+            <span class="chip-label">Crop Detected</span>
+            <span class="chip-value" id="cropName">—</span>
+          </div>
+          <div class="info-chip" id="severityChip" style="display:none">
+            <span class="chip-label">Severity</span>
+            <span class="chip-value" id="severityValue">—</span>
+          </div>
+          <div class="info-chip">
+            <span class="chip-label">AI Confidence</span>
+            <span class="chip-value" id="confidenceValue">—</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="result-block">
+        <h3 class="block-title">🔬 Diagnosis</h3>
+        <p id="diagnosisText" class="block-text"></p>
+      </div>
+
+      <div class="result-block" id="severityBlock" style="display:none">
+        <h3 class="block-title">⚠️ Severity Level</h3>
+        <div class="sev-bar-wrap">
+          <div class="sev-bar">
+            <div class="sev-fill" id="sevFill"></div>
+          </div>
+          <span class="sev-text" id="sevText"></span>
+        </div>
+      </div>
+
+      <div class="result-block">
+        <h3 class="block-title">💡 What To Do</h3>
+        <ul class="rec-list" id="recList"></ul>
+      </div>
+
+      <button class="reset-btn" onclick="resetApp()">🔄 Analyze Another Crop</button>
+
+    </section>
+
+    <!-- ERROR -->
+    <section class="card error-card" id="errorSection" style="display:none">
+      <div class="error-icon">⚠️</div>
+      <h3>Something went wrong</h3>
+      <p id="errorMsg" class="error-msg"></p>
+      <button class="reset-btn" onclick="resetApp()">Try Again</button>
+    </section>
+
+  </main>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <p>Built with 🌍 for farmers · Powered by HuggingFace AI</p>
+  </footer>
+
+  <!-- ✅ FIXED: Flask static path -->
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+
+</body>
+</html>
